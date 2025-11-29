@@ -3,11 +3,11 @@ package com.innowise.webproject.dao.impl;
 import com.innowise.webproject.dao.Dao;
 import com.innowise.webproject.entity.User;
 
-public class UserDao implements Dao {
+public class UserDAO implements Dao {
 
     @Override
-    public void findByUsername(String username) {
-
+    public User findByUsername(String username) {
+        return null;
     }
 
     @Override

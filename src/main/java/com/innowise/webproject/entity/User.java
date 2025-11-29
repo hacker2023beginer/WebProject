@@ -27,4 +27,14 @@ public class User {
     public void setOdds(Competition competition, double odds) {
         role.setOdds(this, competition, odds);
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public User(String username, String password, UserRole role) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 }
