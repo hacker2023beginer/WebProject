@@ -26,5 +26,10 @@ public class ClientUserRole implements UserRole {
     public void placeBet(User user, Competition competition, Bet bet) {
 
     }
+
+    @Override
+    public String toString() {
+        return "ClientUserRole";
+    }
 }
 

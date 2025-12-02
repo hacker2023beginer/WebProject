@@ -25,4 +25,9 @@ public class AdminUserRole implements UserRole {
     public void setOdds(User user, Competition competition, double odds) {
         throw new UnsupportedOperationException("Admin cannot set odds");
     }
+
+    @Override
+    public String toString() {
+        return "AdminUserRole";
+    }
 }

@@ -2,6 +2,8 @@ package com.innowise.webproject.entity;
 
 import com.innowise.webproject.command.UserRole;
 
+import java.util.Objects;
+
 public class User {
     private int id;
     private String username;
@@ -32,9 +34,43 @@ public class User {
         return password;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
     public User(String username, String password, UserRole role) {
         this.username = username;
         this.password = password;
         this.role = role;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+        return id == user.id && Objects.equals(username, user.username) && Objects.equals(password, user.password) && Objects.equals(role, user.role);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + Objects.hashCode(username);
+        result = 31 * result + Objects.hashCode(password);
+        result = 31 * result + Objects.hashCode(role);
+        return result;
     }
 }

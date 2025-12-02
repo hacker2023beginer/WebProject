@@ -1,13 +1,14 @@
 package com.innowise.webproject.controller;
 
 import com.innowise.webproject.entity.User;
+import com.innowise.webproject.exception.DAOException;
 import com.innowise.webproject.service.AuthService;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/app")
@@ -71,7 +72,12 @@ public class AuthController extends HttpServlet {
         String password = req.getParameter(PASSWORD_PARAMETER);
         switch (action) {
             case LOGIN_ACTION:
-                User user = authService.login(username, password);
+                User user = null;
+                try {
+                    user = authService.login(username, password);
+                } catch (DAOException e) {
+                    throw new RuntimeException(e);
+                }
                 if (user != null) {
                     req.getSession().setAttribute(USER_ATTRIBUTE, user);
                     resp.sendRedirect(req.getContextPath() + REDIRECT_TO_MENU_PAGE);
@@ -81,7 +87,12 @@ public class AuthController extends HttpServlet {
                 }
                 break;
             case REGISTER_ACTION:
-                boolean success = authService.register(username, password);
+                boolean success = false;
+                try {
+                    success = authService.register(username, password);
+                } catch (DAOException e) {
+                    throw new RuntimeException(e);
+                }
                 if (success) {
                     resp.sendRedirect(req.getContextPath() + REDIRECT_TO_LOGIN_PAGE);
                 } else {

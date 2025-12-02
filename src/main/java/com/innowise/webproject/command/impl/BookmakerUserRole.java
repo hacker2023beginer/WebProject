@@ -25,4 +25,9 @@ public class BookmakerUserRole implements UserRole {
     public void setOdds(User user, Competition competition, double odds) {
         // Логика: букмекер устанавливает коэффициенты
     }
+
+    @Override
+    public String toString() {
+        return "BookmakerUserRole";
+    }
 }
