@@ -1,23 +1,29 @@
 <%--
   Created by IntelliJ IDEA.
-  User: Vlad
-  Date: 03.12.2025
-  Time: 01:20
+  User: tsurk
+  Date: 30.11.2025
+  Time: 01:07
+  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
-<head><title>Menu</title></head>
+<head><title>Register</title></head>
 <body>
-<h1>Main Menu</h1>
+<h1>User Registration</h1>
 
-<ul>
-    <li><a href="/app?action=home">Home</a></li>
-    <li><a href="/app?action=login">Login</a></li>
-    <li><a href="/app?action=register">Register</a></li>
-    <li><a href="/app?action=competitions">Competitions</a></li>
-    <li><a href="/app?action=users">Users</a></li>
-</ul>
+<form action="/app" method="post">
+    <input type="hidden" name="action" value="register"/>
+    <label>Username:</label>
+    <input type="text" name="username" required/><br/>
 
+    <label>Password:</label>
+    <input type="password" name="password" required/><br/>
+
+    <input type="submit" value="Register"/>
+</form>
+
+<a href="/app?action=login">Already have an account? Login</a> |
+<a href="/app?action=home">Home</a>
 </body>
 </html>

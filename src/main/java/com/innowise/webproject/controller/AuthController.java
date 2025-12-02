@@ -14,6 +14,7 @@ import java.io.IOException;
 @WebServlet("/app")
 public class AuthController extends HttpServlet {
     private static final String LOGIN_ACTION = "login";
+    private static final String MENU_ACTION = "menu";
     private static final String REGISTER_ACTION = "register";
     private static final String LOGOUT_ACTION = "logout";
     private static final String HOME_ACTION = "home";
@@ -22,8 +23,8 @@ public class AuthController extends HttpServlet {
     private static final String REGISTER_PAGE = "/WEB-INF/view/register.jsp";
     private static final String HOME_PAGE = "/WEB-INF/view/home.jsp";
     private static final String MENU_PAGE = "/WEB-INF/view/menu.jsp";
-    private static final String REDIRECT_TO_MENU_PAGE = "/auth?action=menu";
-    private static final String REDIRECT_TO_LOGIN_PAGE = "/auth?action=login";
+    private static final String REDIRECT_TO_MENU_PAGE = "/app?action=menu";
+    private static final String REDIRECT_TO_LOGIN_PAGE = "/app?action=login";
     private static final String REDIRECT_TO_REGISTER_PAGE = "/WEB-INF/view/register.jsp";
     private static final String ERROR_ATTRIBUTE = "error";
     private static final String USER_ATTRIBUTE = "user";
@@ -58,6 +59,9 @@ public class AuthController extends HttpServlet {
                 req.getSession().invalidate();
                 resp.sendRedirect(req.getContextPath() + REDIRECT_TO_LOGIN_PAGE);
                 return;
+            case MENU_ACTION:
+                view = MENU_PAGE;
+                break;
             default:
                 view = HOME_PAGE; //anything else mb
         }
