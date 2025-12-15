@@ -25,17 +25,28 @@ public class AdminUserRoleCommand implements UserRoleCommand {
         try {
             if (competition.getId() == 0) {
                 competitionDAO.addCompetition(competition);
+                logger.info("Admin {} created competition {}", user.getUsername(), competition);
+            } else {
+                competitionDAO.updateCompetition(competition);
+                logger.info("Admin {} updated competition {}", user.getUsername(), competition);
             }
-        } catch (DaoException e) {}
+        } catch (DaoException e) {
+            logger.error("Error managing competition", e);
+        }
     }
 
     @Override
     public void manageUsers(User user, User target) {
-        // Логика: админ управляет пользователями
+        try {
+            userDAO.updateUser(target); // например, смена роли или блокировка
+            logger.info("Admin {} updated user {}", user.getUsername(), target.getUsername());
+        } catch (DaoException e) {
+            logger.error("Error managing user", e);
+        }
     }
 
     @Override
-    public void setOdds(User user, Competition competition, double odds) {
+    public void setOdds(User user, Competition competition, double homeWin, double draw, double awayWin) {
         throw new UnsupportedOperationException("Admin cannot set odds");
     }
 

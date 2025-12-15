@@ -1,17 +1,18 @@
 package com.innowise.webproject.entity.impl;
 
 import com.innowise.webproject.entity.AppBet;
+import java.math.BigDecimal;
 
 public class Bet implements AppBet {
     private int id;
     private int userId;
-    private int betId;
+    private int competitionId;   // вместо betId
     private BetType betType;
-    private double amount;
+    private BigDecimal amount;   // деньги лучше хранить как BigDecimal
     private double coefficient;
+    private String status;       // PENDING, WON, LOST
 
-    public Bet() {
-    }
+    public Bet() {}
 
     @Override
     public int getId() {
@@ -33,14 +34,12 @@ public class Bet implements AppBet {
         this.userId = userId;
     }
 
-    @Override
-    public int getBetId() {
-        return betId;
+    public int getCompetitionId() {
+        return competitionId;
     }
 
-    @Override
-    public void setBetId(int betId) {
-        this.betId = betId;
+    public void setCompetitionId(int competitionId) {
+        this.competitionId = competitionId;
     }
 
     @Override
@@ -49,17 +48,32 @@ public class Bet implements AppBet {
     }
 
     @Override
+    public String getStringBetType() {
+        BetType betType = this.getBetType();
+        if (betType == BetType.DRAW) {
+            return "DRAW";
+        }
+        if (betType == BetType.LOSE) {
+            return "LOSE";
+        }
+        if (betType == BetType.WIN) {
+            return "WIN";
+        }
+        return "EXACT_SCORE";
+    }
+
+    @Override
     public void setBetType(BetType betType) {
         this.betType = betType;
     }
 
     @Override
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
     @Override
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
@@ -71,5 +85,26 @@ public class Bet implements AppBet {
     @Override
     public void setCoefficient(double coefficient) {
         this.coefficient = coefficient;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Bet{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", competitionId=" + competitionId +
+                ", betType=" + betType +
+                ", amount=" + amount +
+                ", coefficient=" + coefficient +
+                ", status='" + status + '\'' +
+                '}';
     }
 }

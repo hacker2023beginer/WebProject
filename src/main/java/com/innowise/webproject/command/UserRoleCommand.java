@@ -8,5 +8,5 @@ public interface UserRoleCommand {
     void placeBet(User user, Competition competition, Bet bet);
     void manageCompetition(User user, Competition competition);
     void manageUsers(User user, User target);
-    void setOdds(User user, Competition competition, double odds);
+    void setOdds(User user, Competition competition, double homeWin, double draw, double awayWin);
 }

@@ -9,7 +9,7 @@ public interface AppUser {
     void placeBet(Competition competition, Bet bet);
     void manageCompetition(Competition competition);
     void manageUsers(User target);
-    void setOdds(Competition competition, double odds);
+    void setOdds(Competition competition, double homeWin, double draw, double awayWin);
     String getPassword();
     void setId(int id);
     int getId();

@@ -15,6 +15,10 @@ public class User implements AppUser {
         this.role = role;
     }
 
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     @Override
     public void placeBet(Competition competition, Bet bet) {
         role.getCommand().placeBet(this, competition, bet);
@@ -31,8 +35,8 @@ public class User implements AppUser {
     }
 
     @Override
-    public void setOdds(Competition competition, double odds) {
-        role.getCommand().setOdds(this, competition, odds);
+    public void setOdds(Competition competition, double homeWin, double draw, double awayWin) {
+        role.getCommand().setOdds(this, competition, homeWin, draw, awayWin);
     }
 
     @Override
