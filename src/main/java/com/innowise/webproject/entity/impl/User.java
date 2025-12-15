@@ -1,10 +1,11 @@
-package com.innowise.webproject.entity;
+package com.innowise.webproject.entity.impl;
 
 import com.innowise.webproject.command.UserRole;
+import com.innowise.webproject.entity.AppUser;
 
 import java.util.Objects;
 
-public class User {
+public class User implements AppUser {
     private int id;
     private String username;
     private String password;
@@ -14,38 +15,47 @@ public class User {
         this.role = role;
     }
 
+    @Override
     public void placeBet(Competition competition, Bet bet) {
-        role.placeBet(this, competition, bet);
+        role.getCommand().placeBet(this, competition, bet);
     }
 
+    @Override
     public void manageCompetition(Competition competition) {
-        role.manageCompetition(this, competition);
+        role.getCommand().manageCompetition(this, competition);
     }
 
+    @Override
     public void manageUsers(User target) {
-        role.manageUsers(this, target);
+        role.getCommand().manageUsers(this, target);
     }
 
+    @Override
     public void setOdds(Competition competition, double odds) {
-        role.setOdds(this, competition, odds);
+        role.getCommand().setOdds(this, competition, odds);
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public String getUsername() {
         return username;
     }
 
+    @Override
     public UserRole getRole() {
         return role;
     }

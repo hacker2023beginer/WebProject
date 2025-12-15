@@ -1,8 +1,8 @@
 package com.innowise.webproject.controller;
 
-import com.innowise.webproject.entity.User;
-import com.innowise.webproject.exception.DAOException;
-import com.innowise.webproject.service.AuthService;
+import com.innowise.webproject.entity.impl.User;
+import com.innowise.webproject.exception.ServiceException;
+import com.innowise.webproject.service.impl.AuthService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -12,32 +12,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/app")
-public class AuthController extends HttpServlet {
-    private static final String LOGIN_ACTION = "login";
-    private static final String MENU_ACTION = "menu";
-    private static final String REGISTER_ACTION = "register";
-    private static final String LOGOUT_ACTION = "logout";
-    private static final String HOME_ACTION = "home";
-    private static final String ACTION_PARAMETER= "action";
-    private static final String LOGIN_PAGE = "/WEB-INF/view/login.jsp";
-    private static final String REGISTER_PAGE = "/WEB-INF/view/register.jsp";
-    private static final String HOME_PAGE = "/WEB-INF/view/home.jsp";
-    private static final String MENU_PAGE = "/WEB-INF/view/menu.jsp";
-    private static final String REDIRECT_TO_MENU_PAGE = "/app?action=menu";
-    private static final String REDIRECT_TO_LOGIN_PAGE = "/app?action=login";
-    private static final String REDIRECT_TO_REGISTER_PAGE = "/WEB-INF/view/register.jsp";
-    private static final String ERROR_ATTRIBUTE = "error";
-    private static final String USER_ATTRIBUTE = "user";
-    private static final String ERROR_LOGIN_MESSAGE = "error";
-    private static final String USERNAME_PARAMETER = "username";
-    private static final String PASSWORD_PARAMETER = "password";
-    private static final String ERROR_REGISTER_MESSAGE = "Registration failed. Username or email already exists.";
-
+public class AuthController extends HttpServlet implements WebParameter{
     private AuthService authService;
 
     @Override
     public void init() throws ServletException {
-        authService = new AuthService(); // можно внедрять через DI, но для учебного проекта достаточно new
+        authService = new AuthService();
     }
 
     @Override
@@ -63,7 +43,7 @@ public class AuthController extends HttpServlet {
                 view = MENU_PAGE;
                 break;
             default:
-                view = HOME_PAGE; //anything else mb
+                view = HOME_PAGE;
         }
 
         req.getRequestDispatcher(view).forward(req, resp);
@@ -76,34 +56,34 @@ public class AuthController extends HttpServlet {
         String password = req.getParameter(PASSWORD_PARAMETER);
         switch (action) {
             case LOGIN_ACTION:
-                User user = null;
+                User user;
                 try {
                     user = authService.login(username, password);
-                } catch (DAOException e) {
+                } catch (ServiceException e) {
                     throw new RuntimeException(e);
                 }
                 if (user != null) {
                     req.getSession().setAttribute(USER_ATTRIBUTE, user);
                     resp.sendRedirect(req.getContextPath() + REDIRECT_TO_MENU_PAGE);
                 } else {
-                    req.setAttribute(ERROR_ATTRIBUTE, ERROR_LOGIN_MESSAGE); //?
-                    req.getRequestDispatcher(LOGIN_PAGE).forward(req, resp); //?
+                    req.setAttribute(ERROR_ATTRIBUTE, "error");
+                    req.getRequestDispatcher(LOGIN_PAGE).forward(req, resp);
                 }
                 break;
             case REGISTER_ACTION:
-                boolean success = false;
+                boolean success;
                 try {
                     success = authService.register(username, password);
-                } catch (DAOException e) {
+                } catch (ServiceException e) {
+                    //переход на страницу ошибок и lock
                     throw new RuntimeException(e);
                 }
                 if (success) {
                     resp.sendRedirect(req.getContextPath() + REDIRECT_TO_LOGIN_PAGE);
                 } else {
-                    req.setAttribute(ERROR_ATTRIBUTE, ERROR_REGISTER_MESSAGE);
+                    req.setAttribute(ERROR_ATTRIBUTE, "Registration failed. Username or email already exists.");
                     req.getRequestDispatcher(REDIRECT_TO_REGISTER_PAGE).forward(req, resp);
                 }
-                break;
         }
     }
 }

@@ -1,11 +1,11 @@
 package com.innowise.webproject.command.impl;
 
-import com.innowise.webproject.command.UserRole;
-import com.innowise.webproject.entity.Bet;
-import com.innowise.webproject.entity.Competition;
-import com.innowise.webproject.entity.User;
+import com.innowise.webproject.command.UserRoleCommand;
+import com.innowise.webproject.entity.impl.Bet;
+import com.innowise.webproject.entity.impl.Competition;
+import com.innowise.webproject.entity.impl.User;
 
-public class ClientUserRole implements UserRole {
+public class ClientUserRoleCommand implements UserRoleCommand {
 
     @Override
     public void manageCompetition(User user, Competition competition) {

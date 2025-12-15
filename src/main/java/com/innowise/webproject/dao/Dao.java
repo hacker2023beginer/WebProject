@@ -1,12 +1,14 @@
 package com.innowise.webproject.dao;
 
-import com.innowise.webproject.entity.User;
-import com.innowise.webproject.exception.DAOException;
+import com.innowise.webproject.entity.impl.User;
+import com.innowise.webproject.exception.DaoException;
+
+import java.util.Optional;
 
 public interface Dao {
-    User authenticationByUsername(String username) throws DAOException; // authentication
-    User authenticationById(int id) throws DAOException;
-    void addUser(User user) throws DAOException;
-    void updateUser(User user) throws DAOException;
-    void deleteUser(int id) throws DAOException;
+    Optional<User> authenticationByUsername(String username) throws DaoException; // authentication
+    Optional<User> authenticationById(int id) throws DaoException;
+    void addUser(User user) throws DaoException;
+    void updateUser(User user) throws DaoException;
+    void deleteUser(int id) throws DaoException;
 }
