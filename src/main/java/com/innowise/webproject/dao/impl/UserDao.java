@@ -2,7 +2,7 @@ package com.innowise.webproject.dao.impl;
 
 import com.innowise.webproject.command.UserRole;
 import com.innowise.webproject.connectionpool.PostgresConnectionPool;
-import com.innowise.webproject.dao.Dao;
+import com.innowise.webproject.dao.BaseDao;
 import com.innowise.webproject.entity.impl.User;
 import com.innowise.webproject.exception.DaoException;
 import org.apache.logging.log4j.LogManager;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDao implements Dao {
+public class UserDao implements BaseDao {
     private static final Logger logger = LogManager.getLogger();
     private static final String INSERT_USER = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
     private static final String SELECT_BY_ID = "SELECT id, username, password, role FROM users WHERE id = ?";
@@ -21,12 +21,13 @@ public class UserDao implements Dao {
     private static final String SELECT_ALL = "SELECT id, username, password, role FROM users";
     private static final String UPDATE_USER = "UPDATE users SET username = ?, password = ?, role = ? WHERE id = ?";
     private static final String DELETE_USER = "DELETE FROM users WHERE id = ?";
-
-    public UserDao() {
-    }
+    private static final String USERNAME_PARAMETER = "username";
+    private static final String PASSWORD_PARAMETER = "password";
+    private static final String ROLE_PARAMETER = "role";
+    private static final String ID_COLUMN = "id";
 
     @Override
-    public void addUser(User user) throws DaoException {
+    public boolean addUser(User user) throws DaoException {
         Connection connection = PostgresConnectionPool.getInstance().getConnection();
         try (PreparedStatement statement = connection.prepareStatement(INSERT_USER)) {
             statement.setString(1, user.getUsername());
@@ -34,6 +35,7 @@ public class UserDao implements Dao {
             statement.setString(3, user.getRole().toString());
             statement.executeUpdate();
             logger.info("User added: {}", user.getUsername());
+            return true;
         } catch (SQLException e) {
             logger.error("Error adding user", e);
             throw new DaoException("Error adding user", e);
@@ -51,11 +53,11 @@ public class UserDao implements Dao {
             Optional<User> optionalUser = Optional.empty();
             if (resultSet.next()) {
                 User user = new User(
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        UserRole.valueOf(resultSet.getString("role"))
+                        resultSet.getString(USERNAME_PARAMETER),
+                        resultSet.getString(PASSWORD_PARAMETER),
+                        UserRole.valueOf(resultSet.getString(ROLE_PARAMETER))
                 );
-                user.setId(resultSet.getInt("id"));
+                user.setId(resultSet.getInt(ID_COLUMN));
                 optionalUser = Optional.of(user);
             }
             return optionalUser;
@@ -76,11 +78,11 @@ public class UserDao implements Dao {
             Optional<User> optionalUser = Optional.empty();
             if (resultSet.next()) {
                 User user = new User(
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        UserRole.valueOf(resultSet.getString("role"))
+                        resultSet.getString(USERNAME_PARAMETER),
+                        resultSet.getString(PASSWORD_PARAMETER),
+                        UserRole.valueOf(resultSet.getString(ROLE_PARAMETER))
                 );
-                user.setId(resultSet.getInt("id"));
+                user.setId(resultSet.getInt(ID_COLUMN));
                 return optionalUser.of(user);
             }
             return optionalUser;
@@ -99,11 +101,11 @@ public class UserDao implements Dao {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL);
             while (resultSet.next()) {
                 User user = new User(
-                        resultSet.getString("username"),
-                        resultSet.getString("password"),
-                        UserRole.valueOf(resultSet.getString("role"))
+                        resultSet.getString(USERNAME_PARAMETER),
+                        resultSet.getString(PASSWORD_PARAMETER),
+                        UserRole.valueOf(resultSet.getString(ROLE_PARAMETER))
                 );
-                user.setId(resultSet.getInt("id"));
+                user.setId(resultSet.getInt(ID_COLUMN));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -116,7 +118,7 @@ public class UserDao implements Dao {
     }
 
     @Override
-    public void updateUser(User user) throws DaoException {
+    public boolean updateUser(User user) throws DaoException {
         Connection connection = PostgresConnectionPool.getInstance().getConnection();
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
             statement.setString(1, user.getUsername());
@@ -125,6 +127,7 @@ public class UserDao implements Dao {
             statement.setInt(4, user.getId());
             statement.executeUpdate();
             logger.info("User updated: {}", user.getUsername());
+            return true;
         } catch (SQLException e) {
             logger.error("Error updating user", e);
             throw new DaoException("Error updating user", e);
@@ -134,12 +137,13 @@ public class UserDao implements Dao {
     }
 
     @Override
-    public void deleteUser(int id) throws DaoException {
+    public boolean deleteUser(int id) throws DaoException {
         Connection connection = PostgresConnectionPool.getInstance().getConnection();
         try (PreparedStatement statement = connection.prepareStatement(DELETE_USER)) {
             statement.setInt(1, id);
             statement.executeUpdate();
             logger.info("User deleted: ID {}", id);
+            return true;
         } catch (SQLException e) {
             logger.error("Error deleting user", e);
             throw new DaoException("Error deleting user", e);
