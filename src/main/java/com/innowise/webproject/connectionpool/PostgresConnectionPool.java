@@ -16,6 +16,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public class PostgresConnectionPool {
     private static final Logger logger = LogManager.getLogger();
     private static final String PROPERTY_PATH = "db";
+    private static final String PROPERTY_DB_URL = "db.url";
+    private static final String PROPERTY_DB_POOLSIZE = "db.poolsize";
+    private static final String PROPERTY_DB_USER = "db.user";
+    private static final String PROPERTY_DB_PASSWORD = "db.password";
     private static final ReentrantLock lock = new ReentrantLock();
     private static PostgresConnectionPool instance;
     private ArrayBlockingQueue<Connection> freeConnections;
@@ -59,10 +63,10 @@ public class PostgresConnectionPool {
         if (resource == null) {
             logger.fatal("Error while reading properties");
         } else {
-            String connectionURL = resource.getString("db.url");
-            String initialCapacityString = resource.getString("db.poolsize");
-            String user = resource.getString("db.user");
-            String pass = resource.getString("db.password");
+            String connectionURL = resource.getString(PROPERTY_DB_URL);
+            String initialCapacityString = resource.getString(PROPERTY_DB_POOLSIZE);
+            String user = resource.getString(PROPERTY_DB_USER);
+            String pass = resource.getString(PROPERTY_DB_PASSWORD);
 
             int initialCapacity = Integer.parseInt(initialCapacityString);
 
