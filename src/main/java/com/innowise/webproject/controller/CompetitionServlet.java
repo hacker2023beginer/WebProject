@@ -34,7 +34,7 @@ public class CompetitionServlet extends HttpServlet implements WebParameter{
                 try {
                     req.setAttribute(COMPETITIONS_ATTRIBUTE, competitionService.getAllCompetitions());
                 } catch (ServiceException e) {
-                    req.setAttribute("error", "Cannot load competitions");
+                    req.setAttribute(ERROR_ATTRIBUTE, "Cannot load competitions");
                 }
                 req.getRequestDispatcher(REDIRECT_TO_COMPETITION_LIST_PAGE).forward(req, resp);
                 break;
@@ -44,7 +44,7 @@ public class CompetitionServlet extends HttpServlet implements WebParameter{
                 try {
                     req.setAttribute(COMPETITION_ATTRIBUTE, competitionService.getCompetitionById(id));
                 } catch (ServiceException e) {
-                    req.setAttribute("error", "Cannot load competition");
+                    req.setAttribute(ERROR_ATTRIBUTE, "Cannot load competition");
                 }
                 req.getRequestDispatcher(REDIRECT_TO_COMPETITION_EDIT_PAGE).forward(req, resp);
                 break;
@@ -72,7 +72,7 @@ public class CompetitionServlet extends HttpServlet implements WebParameter{
                     competitionService.create(competition);
                     resp.sendRedirect(req.getContextPath() + REDIRECT_TO_LIST_PAGE);
                 } catch (ServiceException e) {
-                    req.setAttribute("error", "Cannot create competition");
+                    req.setAttribute(ERROR_ATTRIBUTE, "Cannot create competition");
                     req.getRequestDispatcher(REDIRECT_TO_COMPETITION_EDIT_PAGE).forward(req, resp);
                 }
                 break;
@@ -87,7 +87,7 @@ public class CompetitionServlet extends HttpServlet implements WebParameter{
                     competitionService.deleteCompetition(id);
                     resp.sendRedirect(req.getContextPath() + REDIRECT_TO_LIST_PAGE);
                 } catch (ServiceException e) {
-                    req.setAttribute("error", "Cannot delete competition");
+                    req.setAttribute(ERROR_ATTRIBUTE, "Cannot delete competition");
                     req.getRequestDispatcher(REDIRECT_TO_COMPETITION_LIST_PAGE).forward(req, resp);
                 }
                 break;

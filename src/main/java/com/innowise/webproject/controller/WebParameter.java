@@ -24,12 +24,16 @@ public interface WebParameter {
     String REDIRECT_TO_REGISTER_PAGE = "/WEB-INF/view/register.jsp";
     String REDIRECT_TO_COMPETITION_LIST_PAGE = "/WEB-INF/view/competitionList.jsp";
     String REDIRECT_TO_COMPETITION_EDIT_PAGE = "/WEB-INF/view/competitionEdit.jsp";
+    String REDIRECT_TO_BET_LIST = "/WEB-INF/view/betList.jsp";
+    String REDIRECT_TO_BET_CREATE = "/WEB-INF/view/betCreate.jsp";
+    String REDIRECT_TO_BET = "/bet";
 
     //Attribute
     String ERROR_ATTRIBUTE = "error";
     String USER_ATTRIBUTE = "user";
     String COMPETITIONS_ATTRIBUTE = "competitions";
     String COMPETITION_ATTRIBUTE = "competition";
+    String BETS_ATTRIBUTE = "bets";
 
     //Parameter
     String USERNAME_PARAMETER = "username";
@@ -38,4 +42,7 @@ public interface WebParameter {
     String ID_PARAMETER = "id";
     String TEAM_HOME_PARAMETER = "teamHome";
     String TEAM_AWAY_PARAMETER = "teamAway";
+    String COMPETITION_ID_PARAMETER = "competitionId";
+    String AMOUNT_PARAMETER = "amount";
+    String BET_TYPE_PARAMETER = "betType";
 }
