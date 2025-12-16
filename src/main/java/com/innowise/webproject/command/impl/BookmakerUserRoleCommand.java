@@ -29,7 +29,6 @@ public class BookmakerUserRoleCommand implements UserRoleCommand {
     @Override
     public void setOdds(User bookmaker, Competition competition, double homeWin, double draw, double awayWin) {
         try {
-            // Лучше принимать три коэффициента, но если один — обновим homeWin
             competitionService.updateOdds(
                     competition.getId(),
                     homeWin,

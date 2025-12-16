@@ -51,9 +51,6 @@ public class ClientUserRoleCommand implements UserRoleCommand {
     public void setOdds(User user, Competition competition, double homeWin, double draw, double awayWin) {
         throw new UnsupportedOperationException("Client cannot set odds");
     }
-    @Override
-    public String toString() {
-        return "ClientUserRole";
-    }
+    
 }
 

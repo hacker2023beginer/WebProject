@@ -6,7 +6,6 @@ import com.innowise.webproject.dao.impl.UserDao;
 import com.innowise.webproject.entity.impl.Bet;
 import com.innowise.webproject.entity.impl.Competition;
 import com.innowise.webproject.entity.impl.User;
-import com.innowise.webproject.exception.CommandException;
 import com.innowise.webproject.exception.ServiceException;
 import com.innowise.webproject.service.CompetitionService;
 import com.innowise.webproject.service.UserService;
@@ -46,6 +45,7 @@ public class AdminUserRoleCommand implements UserRoleCommand {
                 logger.info("Admin {} updated competition {}", admin.getUsername(), competition.getId());
             }
         } catch (ServiceException e) {
+
             logger.error("manageCompetition failed", e);
         }
     }

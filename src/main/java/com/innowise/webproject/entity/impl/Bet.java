@@ -6,11 +6,11 @@ import java.math.BigDecimal;
 public class Bet implements AppBet {
     private int id;
     private int userId;
-    private int competitionId;   // вместо betId
+    private int competitionId;
     private BetType betType;
-    private BigDecimal amount;   // деньги лучше хранить как BigDecimal
+    private BigDecimal amount;
     private double coefficient;
-    private String status;       // PENDING, WON, LOST
+    private String status;
 
     public Bet() {}
 
@@ -94,6 +94,8 @@ public class Bet implements AppBet {
     public void setStatus(String status) {
         this.status = status;
     }
+
+
 
     @Override
     public String toString() {
