@@ -15,15 +15,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class PostgresConnectionPool {
     private static final Logger logger = LogManager.getLogger();
-    private static final String PROPERTY_PATH = "db"; // db.properties in resources
-
+    private static final String PROPERTY_PATH = "db";
+    private static final ReentrantLock lock = new ReentrantLock();
+    private static PostgresConnectionPool instance;
     private ArrayBlockingQueue<Connection> freeConnections;
     private ArrayBlockingQueue<Connection> takenConnections;
 
-    private static final ReentrantLock lock = new ReentrantLock();
-    private static volatile PostgresConnectionPool instance;
 
-    // Singleton
     public static PostgresConnectionPool getInstance() {
         if (instance == null) {
             try {
