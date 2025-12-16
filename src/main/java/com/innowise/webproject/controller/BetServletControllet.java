@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 @WebServlet("/bet")
-public class BetServlet extends HttpServlet implements WebParameter{
+public class BetServletControllet extends HttpServlet implements WebParameter{
     private BetServiceImpl betService;
 
     @Override

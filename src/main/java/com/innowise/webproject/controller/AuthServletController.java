@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/app")
-public class AuthController extends HttpServlet implements WebParameter{
+public class AuthServletController extends HttpServlet implements WebParameter{
     private AuthService authService;
 
     @Override

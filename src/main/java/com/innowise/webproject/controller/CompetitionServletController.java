@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/competition")
-public class CompetitionServlet extends HttpServlet implements WebParameter{
+public class CompetitionServletController extends HttpServlet implements WebParameter{
     private CompetitionService competitionService;
 
     @Override
