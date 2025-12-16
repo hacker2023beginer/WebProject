@@ -6,46 +6,58 @@ import com.innowise.webproject.dao.impl.UserDao;
 import com.innowise.webproject.entity.impl.Bet;
 import com.innowise.webproject.entity.impl.Competition;
 import com.innowise.webproject.entity.impl.User;
+import com.innowise.webproject.exception.CommandException;
 import com.innowise.webproject.exception.DaoException;
+import com.innowise.webproject.exception.ServiceException;
+import com.innowise.webproject.service.CompetitionService;
+import com.innowise.webproject.service.impl.CompetitionServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class BookmakerUserRoleCommand implements UserRoleCommand {
     private static final Logger logger = LogManager.getLogger();
-    private final CompetitionDao competitionDAO = new CompetitionDao();
+    private final CompetitionService competitionService;
 
-    @Override
-    public void placeBet(User user, Competition competition, Bet bet) {
-        throw new UnsupportedOperationException("Bookmaker cannot place bets");
+    public BookmakerUserRoleCommand(CompetitionService competitionService) {
+        this.competitionService = competitionService;
+    }
+
+    public BookmakerUserRoleCommand() {
+        competitionService = new CompetitionServiceImpl(new CompetitionDao());
     }
 
     @Override
-    public void manageCompetition(User user, Competition competition) {
-        throw new UnsupportedOperationException("Bookmaker cannot manage competitions");
-    }
-
-    @Override
-    public void manageUsers(User user, User target) {
-        throw new UnsupportedOperationException("Bookmaker cannot manage users");
-    }
-
-    @Override
-    public void setOdds(User user, Competition competition, double homeWin, double draw, double awayWin) {
+    public void setOdds(User bookmaker, Competition competition, double homeWin, double draw, double awayWin) {
         try {
-            competitionDAO.updateOdds(
+            // Лучше принимать три коэффициента, но если один — обновим homeWin
+            competitionService.updateOdds(
                     competition.getId(),
                     homeWin,
                     draw,
                     awayWin
             );
-            logger.info("Bookmaker {} set odds home: {}, draw: {}, away: {} for competition {}", user.getUsername(), homeWin, draw, awayWin, competition.getId());
-        } catch (DaoException e) {
-            logger.error("Error setting odds", e);
+            logger.info("Bookmaker {} set odds for competition {}", bookmaker.getUsername(), competition.getId());
+        } catch (ServiceException e) {
+            logger.error("setOdds failed", e);
         }
     }
 
     @Override
-    public String toString() {
+    public void placeBet(User u, Competition c, Bet b) {
+        throw new UnsupportedOperationException("Bookmaker cannot place bets");
+    }
+
+    @Override
+    public void manageCompetition(User u, Competition c){
+        throw new UnsupportedOperationException("Bookmaker cannot manage competitions");
+    }
+
+    @Override
+    public void manageUsers(User u, User t) {
+        throw new UnsupportedOperationException("Bookmaker cannot manage users");
+    }
+
+    @Override public String toString() {
         return "BookmakerUserRole";
     }
 }

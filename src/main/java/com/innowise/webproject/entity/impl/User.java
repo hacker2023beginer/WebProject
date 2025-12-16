@@ -2,6 +2,7 @@ package com.innowise.webproject.entity.impl;
 
 import com.innowise.webproject.command.UserRole;
 import com.innowise.webproject.entity.AppUser;
+import com.innowise.webproject.exception.CommandException;
 
 import java.util.Objects;
 

@@ -3,6 +3,7 @@ package com.innowise.webproject.command;
 import com.innowise.webproject.entity.impl.Bet;
 import com.innowise.webproject.entity.impl.Competition;
 import com.innowise.webproject.entity.impl.User;
+import com.innowise.webproject.exception.CommandException;
 
 public interface UserRoleCommand {
     void placeBet(User user, Competition competition, Bet bet);

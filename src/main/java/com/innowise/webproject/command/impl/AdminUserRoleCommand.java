@@ -6,14 +6,29 @@ import com.innowise.webproject.dao.impl.UserDao;
 import com.innowise.webproject.entity.impl.Bet;
 import com.innowise.webproject.entity.impl.Competition;
 import com.innowise.webproject.entity.impl.User;
-import com.innowise.webproject.exception.DaoException;
+import com.innowise.webproject.exception.CommandException;
+import com.innowise.webproject.exception.ServiceException;
+import com.innowise.webproject.service.CompetitionService;
+import com.innowise.webproject.service.UserService;
+import com.innowise.webproject.service.impl.CompetitionServiceImpl;
+import com.innowise.webproject.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class AdminUserRoleCommand implements UserRoleCommand {
     private static final Logger logger = LogManager.getLogger();
-    private final CompetitionDao competitionDAO = new CompetitionDao();
-    private final UserDao userDAO = new UserDao();
+    private final CompetitionService competitionService;
+    private final UserService userService;
+
+    public AdminUserRoleCommand(CompetitionService competitionService, UserService userService) {
+        this.competitionService = competitionService;
+        this.userService = userService;
+    }
+
+    public AdminUserRoleCommand() {
+        competitionService = new CompetitionServiceImpl(new CompetitionDao());
+        userService = new UserServiceImpl(new UserDao());
+    }
 
     @Override
     public void placeBet(User user, Competition competition, Bet bet) {
@@ -21,27 +36,27 @@ public class AdminUserRoleCommand implements UserRoleCommand {
     }
 
     @Override
-    public void manageCompetition(User user, Competition competition) {
+    public void manageCompetition(User admin, Competition competition){
         try {
             if (competition.getId() == 0) {
-                competitionDAO.addCompetition(competition);
-                logger.info("Admin {} created competition {}", user.getUsername(), competition);
+                competitionService.create(competition);
+                logger.info("Admin {} created competition {}", admin.getUsername(), competition.getId());
             } else {
-                competitionDAO.updateCompetition(competition);
-                logger.info("Admin {} updated competition {}", user.getUsername(), competition);
+                competitionService.update(competition);
+                logger.info("Admin {} updated competition {}", admin.getUsername(), competition.getId());
             }
-        } catch (DaoException e) {
-            logger.error("Error managing competition", e);
+        } catch (ServiceException e) {
+            logger.error("manageCompetition failed", e);
         }
     }
 
     @Override
-    public void manageUsers(User user, User target) {
+    public void manageUsers(User admin, User target){
         try {
-            userDAO.updateUser(target); // например, смена роли или блокировка
-            logger.info("Admin {} updated user {}", user.getUsername(), target.getUsername());
-        } catch (DaoException e) {
-            logger.error("Error managing user", e);
+            userService.update(target);
+            logger.info("Admin {} updated user {}", admin.getUsername(), target.getUsername());
+        } catch (ServiceException e) {
+            logger.error("manageUsers failed", e);
         }
     }
 
@@ -51,7 +66,5 @@ public class AdminUserRoleCommand implements UserRoleCommand {
     }
 
     @Override
-    public String toString() {
-        return "AdminUserRole";
-    }
+    public String toString() { return "AdminUserRole"; }
 }

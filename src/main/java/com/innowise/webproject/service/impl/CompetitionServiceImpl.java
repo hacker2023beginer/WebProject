@@ -6,10 +6,14 @@ import com.innowise.webproject.exception.DaoException;
 import com.innowise.webproject.exception.ServiceException;
 import com.innowise.webproject.service.CompetitionService;
 
+import java.util.List;
+
 public class CompetitionServiceImpl implements CompetitionService {
     private final CompetitionDao competitionDao;
 
-    public CompetitionServiceImpl(CompetitionDao competitionDao) { this.competitionDao = competitionDao; }
+    public CompetitionServiceImpl(CompetitionDao competitionDao) {
+        this.competitionDao = competitionDao;
+    }
 
     @Override
     public void create(Competition c) throws ServiceException {
@@ -42,6 +46,33 @@ public class CompetitionServiceImpl implements CompetitionService {
     public void updateOdds(int id, double h, double d, double a) throws ServiceException {
         try {
             competitionDao.updateOdds(id, h, d, a);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public Competition getCompetitionById(int id) throws ServiceException {
+        try {
+            return competitionDao.getCompetitionById(id).orElseThrow(() -> new ServiceException("Competition not found: " + id));
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public List<Competition> getAllCompetitions() throws ServiceException {
+        try {
+            return competitionDao.getAllCompetitions();
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void deleteCompetition(int id) throws ServiceException {
+        try {
+            competitionDao.deleteCompetition(id);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

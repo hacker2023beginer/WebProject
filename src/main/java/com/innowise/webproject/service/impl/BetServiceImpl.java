@@ -23,6 +23,12 @@ public class BetServiceImpl implements BetService {
         this.betDao = betDao; this.userDao = userDao; this.competitionDao = competitionDao;
     }
 
+    public BetServiceImpl() {
+        this.betDao = new BetDao();
+        this.userDao = new UserDao();
+        this.competitionDao = new CompetitionDao();
+    }
+
     public void placeBet(Bet bet) throws ServiceException {
         try {
             var competitionOpt = competitionDao.getCompetitionById(bet.getCompetitionId());

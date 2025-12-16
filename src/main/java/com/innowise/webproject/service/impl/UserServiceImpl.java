@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean hasPermission(User user, String permission) {
-        // простая RBAC‑проверка, пока заглушка
+
         return true;
     }
 }

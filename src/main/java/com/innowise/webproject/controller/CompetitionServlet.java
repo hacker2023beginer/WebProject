@@ -1,0 +1,81 @@
+package com.innowise.webproject.controller;
+
+import com.innowise.webproject.dao.impl.CompetitionDao;
+import com.innowise.webproject.entity.impl.Competition;
+import com.innowise.webproject.exception.ServiceException;
+import com.innowise.webproject.service.CompetitionService;
+import com.innowise.webproject.service.impl.CompetitionServiceImpl;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+@WebServlet("/competition")
+public class CompetitionServlet extends HttpServlet implements WebParameter {
+    private CompetitionService competitionService;
+
+    @Override
+    public void init() throws ServletException {
+        competitionService = new CompetitionServiceImpl(new CompetitionDao());
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter(ACTION_PARAMETER);
+        switch (action) {
+            case LIST_ACTION:
+                try {
+                    req.setAttribute("competitions", competitionService.getAllCompetitions());
+                } catch (ServiceException e) {
+                    req.setAttribute(ERROR_ATTRIBUTE, "Cannot load competitions");
+                }
+                req.getRequestDispatcher(COMPETITION_LIST_PAGE).forward(req, resp);
+                break;
+            case EDIT_ACTION:
+                int id = Integer.parseInt(req.getParameter("id"));
+                try {
+                    req.setAttribute("competition", competitionService.getCompetitionById(id));
+                } catch (ServiceException e) {
+                    req.setAttribute(ERROR_ATTRIBUTE, "Cannot load competition");
+                }
+                req.getRequestDispatcher(COMPETITION_EDIT_PAGE).forward(req, resp);
+                break;
+            default:
+                resp.sendRedirect(req.getContextPath() + MENU_PAGE);
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter(ACTION_PARAMETER);
+        switch (action) {
+            case CREATE_ACTION:
+                Competition competition = new Competition();
+                competition.setTeamHome(req.getParameter("teamHome"));
+                competition.setTeamAway(req.getParameter("teamAway"));
+                // дата и коэффициенты тоже из параметров
+                try {
+                    competitionService.create(competition);
+                    resp.sendRedirect(req.getContextPath() + COMPETITION_LIST_PAGE);
+                } catch (ServiceException e) {
+                    req.setAttribute(ERROR_ATTRIBUTE, "Cannot create competition");
+                    req.getRequestDispatcher(COMPETITION_EDIT_PAGE).forward(req, resp);
+                }
+                break;
+            case UPDATE_ACTION:
+                // аналогично обновление
+                break;
+            case DELETE_ACTION:
+                int id = Integer.parseInt(req.getParameter("id"));
+                try {
+                    competitionService.deleteCompetition(id);
+                    resp.sendRedirect(req.getContextPath() + COMPETITION_LIST_PAGE);
+                } catch (ServiceException e) {
+                    req.setAttribute(ERROR_ATTRIBUTE, "Cannot delete competition");
+                    req.getRequestDispatcher(COMPETITION_LIST_PAGE).forward(req, resp);
+                }
+                break;
+        }
+    }
+}
