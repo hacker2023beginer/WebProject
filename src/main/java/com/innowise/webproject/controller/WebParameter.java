@@ -27,6 +27,7 @@ public interface WebParameter {
     String REDIRECT_TO_BET_LIST = "/WEB-INF/view/betList.jsp";
     String REDIRECT_TO_BET_CREATE = "/WEB-INF/view/betCreate.jsp";
     String REDIRECT_TO_BET = "/bet";
+    String REDIRECT_TO_ERROR_PAGE = "/WEB-INF/view/errorPage.jsp";
 
     //Attribute
     String ERROR_ATTRIBUTE = "error";

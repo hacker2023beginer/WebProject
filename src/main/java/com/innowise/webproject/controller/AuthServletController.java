@@ -74,15 +74,14 @@ public class AuthServletController extends HttpServlet implements WebParameter{
                 boolean success;
                 try {
                     success = authService.register(username, password);
-                } catch (ServiceException e) {
-                    //переход на страницу ошибок и lock
-                    throw new RuntimeException(e);
-                }
                 if (success) {
                     resp.sendRedirect(req.getContextPath() + REDIRECT_TO_LOGIN_PAGE);
                 } else {
                     req.setAttribute(ERROR_ATTRIBUTE, "Registration failed. Username or email already exists.");
                     req.getRequestDispatcher(REDIRECT_TO_REGISTER_PAGE).forward(req, resp);
+                }
+                } catch (ServiceException e) {
+                    resp.sendRedirect(req.getContextPath() + REDIRECT_TO_ERROR_PAGE);
                 }
         }
     }
