@@ -20,7 +20,7 @@ public class BetServletControllet extends HttpServlet implements WebParameter{
 
     @Override
     public void init() throws ServletException {
-        betService = new BetServiceImpl(); // твоя реализация
+        betService = new BetServiceImpl();
     }
 
     @Override
